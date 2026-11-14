@@ -4,26 +4,31 @@ let miFuente2;
 let miFuente3;
 let miFuente4;
 let pantalla = -1;
-let creditosAbiertos = false;
 let imagenes = [];
-let imgNube;
 let imgSuelo;
-let caminarDerecha = [];
-let caminarIzquierda = [];
-let salto = [];
-let posicionesX = [20, 170, 330, 490, 680];
-let posicionesY = [40, 100, 25, 75, 35];
-let anchosNube = [70, 100, 85, 120, 60];
-let velocidadesNube = [0.5, 0.8, 0.6, 1, 0.7];
-let personajeX = 80;
-// estados: quieto, caminarDer, caminarIzq, saltar
-let estado = "quieto";
-let frameCaminar = 0;
-let ultimoCambioFrame = 0;
-let frameSalto = 0;
-let ultimoCambioSalto = 0;
 let musicaFondo;
 let musicaIniciada = false;
+
+// pantalla 25: creditos que van subiendo
+let lineasCreditos = [
+  "CRÉDITOS",
+  "",
+  "pole position: bizarre",
+  "",
+  "Alumnas",
+  "Delfina Sánchez y Abril Torres",
+  "",
+  "Autores",
+  "Delfina Sánchez y Abril Torres",
+  "",
+  "Docente",
+  "Leo Garay - Comisión 4",
+  "",
+  "¡Gracias por jugar!"
+];
+let inicioCreditos = 0;
+const velocidadCreditos = 0.05;
+const espacioLineas = 40;
 
 // texto de cada pantalla (la posicion es el numero de pantalla)
 let textos = [
@@ -55,7 +60,8 @@ let textos = [
 ];
 
 // a que pantalla se pasa con un click (-1 = hay que elegir con un boton)
-let siguiente = [1, 2, 3, -1, -1, 8, 3, 6, 9, -1, -1, 13, 14, 16, 15, -1, 22, -1, -1, 21, 23, 18, 24, 17, -1];
+// los 3 finales (17, 18 y 24) van a los creditos (25)
+let siguiente = [1, 2, 3, -1, -1, 8, 3, 6, 9, -1, -1, 13, 14, 16, 15, -1, 22, 25, 25, 21, 23, 18, 24, 17, 25, -1];
 
 const BTN_SI    = { x: 250, y: 300, w: 100, h: 50, label: "SI" };
 const BTN_NO    = { x: 450, y: 300, w: 100, h: 50, label: "NO" };
@@ -65,14 +71,9 @@ const BTN_CHETO  = { x: 211,   y: 238,   w: 56 ,   h: 80  };
 const BTN_FEO  = { x: 586 ,   y: 248,   w: 60 ,   h: 80  };
 const BTN_JUGAR  = { x: 300, y: 130, w: 200, h: 60, label: "JUGAR" };
 const BTN_CREDITOS = { x: 300, y: 205, w: 200, h: 55, label: "CREDITOS" };
-const BTN_VOLVER = { x: 300, y: 305, w: 200, h: 50, label: "VOLVER" };
 const BTN_FENTANILO = { x: 350 , y: 117, w: 70, h:150};
 const BTN_PUERTASECRETA = {x: 598 , y: 149, w:60, h: 80};
-const BTN_REINICIAR = { x: 300, y: 233, w: 280, h: 60, label: "REINICIAR" };
-const intervaloFrame = 120;
-const anchoPersonaje = 100;
-const velocidadMovimiento = 2;
-const ALTURAS_SALTO = [0, 20, 45, 45, 20];
+const BTN_REINICIAR = { x: 300, y: 380, w: 200, h: 50, label: "REINICIAR" };
 
 function preload() {
   miFuente2 = loadFont("data/FrescoStamp.ttf");
@@ -103,14 +104,6 @@ function preload() {
   imagenes[22] = loadImage("carrera2.jpeg");
   imagenes[23] = loadImage("carrera3.jpeg");
   imagenes[24] = loadImage("ganastetrampa.jpeg");
-  for (let i = 1; i <= 3; i++) {
-    caminarDerecha.push(loadImage("sprites/caminarder" + i + ".png"));
-    caminarIzquierda.push(loadImage("sprites/caminarizq" + i + ".png"));
-  }
-  for (let i = 1; i <= 5; i++) {
-    salto.push(loadImage("sprites/salto" + i + ".png"));
-  }
-  imgNube = loadImage("sprites/nube.png");
   imgSuelo = loadImage("sprites/fondo2.png");
   musicaFondo = loadSound("sonidos/musica.mp3");
 }
@@ -121,16 +114,13 @@ function setup() {
 
 function keyPressed() {
   iniciarMusica(musicaFondo, 0.3);
-  if (keyCode == UP_ARROW && pantalla == -1 && estado != "saltar") {
-    estado = "saltar";
-    frameSalto = 0;
-    ultimoCambioSalto = millis();
-  }
 }
 
 function draw() {
   if (pantalla == -1) {
     dibujarInicio();
+  } else if (pantalla == 25) {
+    mostrarCreditos();
   } else {
     mostrarFondo(pantalla);
     mostrarPantalla(pantalla);
@@ -142,16 +132,13 @@ function draw() {
     cursor(HAND);
   } else if (pantalla == 9 && dentroDe(BTN_ACEPTAR)) {
     cursor(HAND);
-  } else if (pantalla == -1 && (
-    (creditosAbiertos && dentroDe(BTN_VOLVER)) ||
-    (!creditosAbiertos && (dentroDe(BTN_JUGAR) || dentroDe(BTN_CREDITOS)))
-  )) {
+  } else if (pantalla == -1 && (dentroDe(BTN_JUGAR) || dentroDe(BTN_CREDITOS))) {
     cursor(HAND);
   } else if (pantalla == 10 && (dentroDe(BTN_FEO) || dentroDe(BTN_CHETO))) {
     cursor(HAND);
   } else if (pantalla == 15 && (dentroDe(BTN_FENTANILO) || dentroDe(BTN_PUERTASECRETA))) {
     cursor(HAND);
-  } else if (esFinal(pantalla) && dentroDe(BTN_REINICIAR)) {
+  } else if (pantalla == 25 && dentroDe(BTN_REINICIAR)) {
     cursor(HAND);
   } else {
     cursor(ARROW);
