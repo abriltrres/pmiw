@@ -9,55 +9,21 @@ function procesarClick() {
     } else if (dentroDe(BTN_CREDITOS)) {
       creditosAbiertos = true;
     }
-    return;
-  }
-  if (pantalla == 0) {
-    pantalla = 1;
-  } else if (pantalla == 1) {
-    pantalla = 2;
-  } else if (pantalla == 2) {
-    pantalla = 3;
+  } else if (siguiente[pantalla] != -1) {
+    pantalla = siguiente[pantalla];
   } else if (pantalla == 3) {
     if (dentroDe(BTN_AUTO)) pantalla = 4;
   } else if (pantalla == 4) {
     if (dentroDe(BTN_SI)) pantalla = 5;
     else if (dentroDe(BTN_NO)) pantalla = 7;
-  } else if (pantalla == 7) {
-    pantalla = 6;
-  } else if (pantalla == 6) {
-    pantalla = 3;
-  } else if (pantalla == 5) {
-    pantalla = 8;
-  } else if (pantalla == 8) {
-    pantalla = 9;
   } else if (pantalla == 9) {
     if (dentroDe(BTN_ACEPTAR)) pantalla = 10;
   } else if (pantalla == 10) {
     if (dentroDe(BTN_CHETO)) pantalla = 11;
     else if (dentroDe(BTN_FEO)) pantalla = 12;
-  } else if (pantalla == 11) {
-    pantalla = 13;
-  } else if (pantalla == 12) {
-    pantalla = 14;
-  } else if (pantalla == 13) {
-    pantalla = 16;
-  } else if (pantalla == 14) {
-    pantalla = 15;
   } else if (pantalla == 15) {
     if (dentroDe(BTN_FENTANILO)) pantalla = 19;
     else if (dentroDe(BTN_PUERTASECRETA)) pantalla = 20;
-  } else if (pantalla == 19) {
-    pantalla = 21;
-  } else if (pantalla == 16) {
-    pantalla = 22;
-  } else if (pantalla == 20) {
-    pantalla = 23;
-  } else if (pantalla == 21) {
-    pantalla = 18;
-  } else if (pantalla == 22) {
-    pantalla = 24;
-  } else if (pantalla == 23) {
-    pantalla = 17;
   } else if (esFinal(pantalla)) {
     if (dentroDe(BTN_REINICIAR)) reiniciar();
   }
@@ -92,61 +58,13 @@ function mostrarPantalla(p) {
     dibujarZona(BTN_PUERTASECRETA);
   }
 
-  if (p == 0) {
-    mostrarTexto("Trabajás en una estación de servicio YPF.");
-  } else if (p == 1) {
-    mostrarTexto("Macri tiene un auto deportivo increíble...");
-  } else if (p == 2) {
-    mostrarTexto("Macri se va a comprar medialunas.");
-  } else if (p == 3) {
-    mostrarTexto("El auto de Macri quedó solo...");
-  } else if (p == 4) {
-    mostrarTexto("¿Qué vas a hacer? ¿Robar el auto?");
-    mostrarBotonesSiNo();
-  } else if (p == 5) {
-    mostrarTexto("Te das a la fuga hasta México. Macri está enojado.");
-  } else if (p == 7) {
-    mostrarTexto("Macri te dice: \"¡Gracias, pibe!\" y se va.");
-  } else if (p == 6) {
-    mostrarTexto("Macri vuelve después de unos días.");
-  } else if (p == 8) {
-    mostrarTexto("Llegás a Miami y encontrás por Facebook una publicación\npara competir en una carrera.");
-  } else if (p == 9) {
-    mostrarTexto("¿Aceptás participar en la carrera?");
-    mostrarBoton(BTN_ACEPTAR);
-  } else if (p == 10) {
-    mostrarTexto("Antes de la carrera querés salir de joda, tenés dos opciones.");
-  } else if (p == 11) {
-    mostrarTexto("Caés a una joda y te encontrás al mismísimo...");
-  } else if (p == 12) {
-    mostrarTexto("Caés a una joda y te encontrás a la mismísima...");
-  } else if (p == 13) {
-    mostrarTexto("Ricardo Fort, que te dice: \"Vamos, pibe, bailás bien, quedate toda\nla noche conmigo\".");
-  } else if (p == 14) {
-    mostrarTexto("Mirtha Legrand, que te dice: \"La noche es joven... te puedo ofrecer\nlo que tomé yo para aguantar tanto tiempo\".");
-  } else if (p == 15) {
-    mostrarTexto("Te ofrece una misteriosa medicina...");
-  } else if (p == 16) {
-    mostrarTexto("En un flash se hace hora de la carrera, esperás a que den las\nluces para acelerar.");
-  } else if (p == 19) {
-    mostrarTexto("No sabés cómo, pero se hace hora de la carrera, esperás a que\nden las luces para acelerar.");
-  } else if (p == 20) {
-    mostrarTexto("Descansaste, se hace hora de la carrera, esperás a que den\nlas luces para acelerar.");
-  } else if (p == 21) {
-    mostrarTexto("El fentanilo que te ofreció Mirtha empieza a hacer efecto, se\nte duermen las piernas y chocás.");
-  } else if (p == 22) {
-    mostrarTexto("Estás con mucha resaca y no podés terminar la carrera.");
-  } else if (p == 23) {
-    mostrarTexto("Evitaste todas las distracciones e hiciste una carrera estupenda.");
-  } else if (p == 24) {
-    mostrarTexto("FINAL: No importa, Ricardo compró el primer lugar y terminaste\nganando. ¡Bailás muy bien!");
-  } else if (p == 17) {
-    mostrarTexto("FINAL: Ganaste la carrera con total honestidad. ¡Sos un campeón!");
-  } else if (p == 18) {
-    mostrarTexto("FINAL: Perdiste. El fentanilo te dejó fuera de carrera...");
-  }
+  mostrarTexto(textos[p]);
 
-  if (esFinal(p)) {
+  if (p == 4) {
+    mostrarBotonesSiNo();
+  } else if (p == 9) {
+    mostrarBoton(BTN_ACEPTAR);
+  } else if (esFinal(p)) {
     dibujarBoton(BTN_REINICIAR);
   }
 }

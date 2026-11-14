@@ -25,6 +25,38 @@ let ultimoCambioSalto = 0;
 let musicaFondo;
 let musicaIniciada = false;
 
+// texto de cada pantalla (la posicion es el numero de pantalla)
+let textos = [
+  "Trabajás en una estación de servicio YPF.",                                                       // 0
+  "Macri tiene un auto deportivo increíble...",                                                      // 1
+  "Macri se va a comprar medialunas.",                                                               // 2
+  "El auto de Macri quedó solo...",                                                                  // 3
+  "¿Qué vas a hacer? ¿Robar el auto?",                                                               // 4
+  "Te das a la fuga hasta México. Macri está enojado.",                                              // 5
+  "Macri vuelve después de unos días.",                                                              // 6
+  "Macri te dice: \"¡Gracias, pibe!\" y se va.",                                                     // 7
+  "Llegás a Miami y encontrás por Facebook una publicación\npara competir en una carrera.",          // 8
+  "¿Aceptás participar en la carrera?",                                                              // 9
+  "Antes de la carrera querés salir de joda, tenés dos opciones.",                                   // 10
+  "Caés a una joda y te encontrás al mismísimo...",                                                  // 11
+  "Caés a una joda y te encontrás a la mismísima...",                                                // 12
+  "Ricardo Fort, que te dice: \"Vamos, pibe, bailás bien, quedate toda\nla noche conmigo\".",        // 13
+  "Mirtha Legrand, que te dice: \"La noche es joven... te puedo ofrecer\nlo que tomé yo para aguantar tanto tiempo\".", // 14
+  "Te ofrece una misteriosa medicina...",                                                            // 15
+  "En un flash se hace hora de la carrera, esperás a que den las\nluces para acelerar.",             // 16
+  "FINAL: Ganaste la carrera con total honestidad. ¡Sos un campeón!",                                // 17
+  "FINAL: Perdiste. El fentanilo te dejó fuera de carrera...",                                       // 18
+  "No sabés cómo, pero se hace hora de la carrera, esperás a que\nden las luces para acelerar.",     // 19
+  "Descansaste, se hace hora de la carrera, esperás a que den\nlas luces para acelerar.",            // 20
+  "El fentanilo que te ofreció Mirtha empieza a hacer efecto, se\nte duermen las piernas y chocás.", // 21
+  "Estás con mucha resaca y no podés terminar la carrera.",                                          // 22
+  "Evitaste todas las distracciones e hiciste una carrera estupenda.",                               // 23
+  "FINAL: No importa, Ricardo compró el primer lugar y terminaste\nganando. ¡Bailás muy bien!"       // 24
+];
+
+// a que pantalla se pasa con un click (-1 = hay que elegir con un boton)
+let siguiente = [1, 2, 3, -1, -1, 8, 3, 6, 9, -1, -1, 13, 14, 16, 15, -1, 22, -1, -1, 21, 23, 18, 24, 17, -1];
+
 const BTN_SI    = { x: 250, y: 300, w: 100, h: 50, label: "SI" };
 const BTN_NO    = { x: 450, y: 300, w: 100, h: 50, label: "NO" };
 const BTN_AUTO   = { x: 200, y: 150, w: 400, h: 250 };
