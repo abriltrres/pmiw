@@ -5,7 +5,7 @@ let miFuente3;
 let miFuente4;
 let pantalla = -1;
 let imagenes = [];
-let imgSuelo;
+let imgInicio;
 let musicaFondo;
 let musicaIniciada = false;
 
@@ -60,8 +60,7 @@ let textos = [
 ];
 
 // a que pantalla se pasa con un click (-1 = hay que elegir con un boton)
-// los 3 finales (17, 18 y 24) van a los creditos (25)
-let siguiente = [1, 2, 3, -1, -1, 8, 3, 6, 9, -1, -1, 13, 14, 16, 15, -1, 22, 25, 25, 21, 23, 18, 24, 17, 25, -1];
+let siguiente = [1, 2, 3, -1, -1, 8, 3, 6, 9, -1, -1, 13, 14, 16, 15, -1, 22, -1, -1, 21, 23, 18, 24, 17, -1, -1];
 
 const BTN_SI    = { x: 250, y: 300, w: 100, h: 50, label: "SI" };
 const BTN_NO    = { x: 450, y: 300, w: 100, h: 50, label: "NO" };
@@ -70,9 +69,9 @@ const BTN_ACEPTAR = { x: 326, y:265, w:135, h:50, label: "aceptar"};
 const BTN_CHETO  = { x: 211,   y: 238,   w: 56 ,   h: 80  };
 const BTN_FEO  = { x: 586 ,   y: 248,   w: 60 ,   h: 80  };
 const BTN_JUGAR  = { x: 300, y: 130, w: 200, h: 60, label: "JUGAR" };
-const BTN_CREDITOS = { x: 300, y: 205, w: 200, h: 55, label: "CREDITOS" };
 const BTN_FENTANILO = { x: 350 , y: 117, w: 70, h:150};
 const BTN_PUERTASECRETA = {x: 598 , y: 149, w:60, h: 80};
+const BTN_CREDITOS = { x: 300, y: 300, w: 200, h: 50, label: "CREDITOS" };
 const BTN_REINICIAR = { x: 300, y: 380, w: 200, h: 50, label: "REINICIAR" };
 
 function preload() {
@@ -104,7 +103,7 @@ function preload() {
   imagenes[22] = loadImage("carrera2.jpeg");
   imagenes[23] = loadImage("carrera3.jpeg");
   imagenes[24] = loadImage("ganastetrampa.jpeg");
-  imgSuelo = loadImage("sprites/fondo2.png");
+  imgInicio = loadImage("inicio.png");
   musicaFondo = loadSound("sonidos/musica.mp3");
 }
 
@@ -132,11 +131,13 @@ function draw() {
     cursor(HAND);
   } else if (pantalla == 9 && dentroDe(BTN_ACEPTAR)) {
     cursor(HAND);
-  } else if (pantalla == -1 && (dentroDe(BTN_JUGAR) || dentroDe(BTN_CREDITOS))) {
+  } else if (pantalla == -1 && dentroDe(BTN_JUGAR)) {
     cursor(HAND);
   } else if (pantalla == 10 && (dentroDe(BTN_FEO) || dentroDe(BTN_CHETO))) {
     cursor(HAND);
   } else if (pantalla == 15 && (dentroDe(BTN_FENTANILO) || dentroDe(BTN_PUERTASECRETA))) {
+    cursor(HAND);
+  } else if (esFinal(pantalla) && dentroDe(BTN_CREDITOS)) {
     cursor(HAND);
   } else if (pantalla == 25 && dentroDe(BTN_REINICIAR)) {
     cursor(HAND);

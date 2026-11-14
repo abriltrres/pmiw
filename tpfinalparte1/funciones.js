@@ -4,15 +4,9 @@ function procesarClick() {
   if (pantalla == -1) {
     if (dentroDe(BTN_JUGAR)) {
       pantalla = 0;
-    } else if (dentroDe(BTN_CREDITOS)) {
-      pantalla = 25;
-      inicioCreditos = millis();
     }
   } else if (siguiente[pantalla] != -1) {
     pantalla = siguiente[pantalla];
-    if (pantalla == 25) {
-      inicioCreditos = millis();
-    }
   } else if (pantalla == 3) {
     if (dentroDe(BTN_AUTO)) pantalla = 4;
   } else if (pantalla == 4) {
@@ -26,12 +20,22 @@ function procesarClick() {
   } else if (pantalla == 15) {
     if (dentroDe(BTN_FENTANILO)) pantalla = 19;
     else if (dentroDe(BTN_PUERTASECRETA)) pantalla = 20;
+  } else if (esFinal(pantalla)) {
+    if (dentroDe(BTN_CREDITOS)) {
+      pantalla = 25;
+      inicioCreditos = millis();
+    }
   } else if (pantalla == 25) {
     if (dentroDe(BTN_REINICIAR)) reiniciar();
   }
 }
 
-// vuelve todo al inicio
+// los 3 finales
+function esFinal(p) {
+  return p == 17 || p == 18 || p == 24;
+}
+
+// vuelve a la pantalla de inicio
 function reiniciar() {
   pantalla = -1;
 }
@@ -54,6 +58,8 @@ function mostrarPantalla(p) {
     mostrarBotonesSiNo();
   } else if (p == 9) {
     mostrarBoton(BTN_ACEPTAR);
+  } else if (esFinal(p)) {
+    dibujarBoton(BTN_CREDITOS);
   }
 }
 
@@ -124,7 +130,7 @@ function dentroDe(btn) {
          mouseY > btn.y && mouseY < btn.y + btn.h;
 }
 
-// botones inicio y REINICIAR
+// botones azules (JUGAR, CREDITOS y REINICIAR)
 function dibujarBoton(btn) {
   let hover = dentroDe(btn);
   strokeWeight(2);
@@ -144,7 +150,7 @@ function dibujarBoton(btn) {
   text(btn.label, btn.x + btn.w / 2, btn.y + btn.h / 2);
 }
 
-// botones la historia (SI, NO, aceptar)
+// botones de la historia (SI, NO, aceptar)
 function mostrarBoton(btn) {
   fill(255);
   rect(btn.x, btn.y, btn.w, btn.h);
@@ -168,9 +174,9 @@ function mostrarBotonesSiNo() {
 function dibujarInicio() {
   background(173, 230, 238);
 
-  let anchoSuelo = 800;
-  let altoSuelo = anchoSuelo * imgSuelo.height / imgSuelo.width;
-  image(imgSuelo, 0, height - altoSuelo + 40, anchoSuelo, altoSuelo);
+  let anchoFondo = 800;
+  let altoFondo = anchoFondo * imgInicio.height / imgInicio.width;
+  image(imgInicio, 0, height - altoFondo + 40, anchoFondo, altoFondo);
 
   textFont(miFuente3);
   textSize(42);
@@ -182,7 +188,6 @@ function dibujarInicio() {
   noStroke();
 
   dibujarBoton(BTN_JUGAR);
-  dibujarBoton(BTN_CREDITOS);
 }
 
 // musica
